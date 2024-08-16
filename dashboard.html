@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body style="background: fixed; background-image: linear-gradient(white,purple); background-repeat: no-repeat; height: 100vh;">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+              <h1 class="navbar-brand text-danger" href="#">MPay</h1>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-auto">
+                  <li class="nav-item ms-5">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                  </li>
+                  <li class="nav-item ms-5">
+                    <a class="nav-link active" aria-current="page" href="#"  onclick="dashboard()">Dashboard</a>
+                  </li>
+                  <li class="nav-item ms-5">
+                    <a class="nav-link active" aria-current="page" href="#" onclick="signup()">Sign Up</a>
+                  </li>
+                  <li class="nav-item ms-5">
+                    <a class="nav-link active" aria-current="page"  href="#" onclick="signin()">Sign In</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+
+   <div>
+    <h3 id="amount">Total balance</h3>
+    <div id="ccbalance"></div>
+
+    <marquee behavior="" direction="">
+        <h1>Transfer And Deposit</h1>
+    </marquee>
+
+    <button style="background-color: pink;" onclick="Transfer()" id="transer">Transfer</button>
+    <!-- <button style="background-color: pink;" onclick="withdraw()" id="withdraw">Withdraw</button> -->
+    <button style="background-color: pink;" onclick="deposit()" id="userdep">Desposit</button>
+   </div>
+    <hr>
+    <button id="his" onclick="history()" style="color: blueviolet; background-color: black;">Transtraction History</button>
+    <div id="display"></div>
+    <div id="posit"></div>
+
+
+
+
+
+    <script>
+        let getUser = JSON.parse(localStorage.getItem('thispage'))
+        let oneuser = localStorage.getItem('eachuser')
+        getUser[oneuser].balance+=500
+
+        console.log(getUser[oneuser]);
+
+        amount.innerHTML = "Total balance " + getUser[oneuser].balance
+
+        function Transfer() {
+            display.innerHTML = `
+               <div class="transition shadow p-5 rounded border-top border-end border-red ">
+                  <div class="nav na-bar">
+                           <h5 class="text-center text-muted display-12">Transfer</h5>
+                         <div class="row">
+                         <input class="form-control mb-3" type="text" placeholder="Acc/No" id="an">
+                         <input class="form-control mb-3" type="text" placeholder="Amount" id="am">
+                         <input class="form-control mb-3" type="text" placeholder="Remark" id="re">
+                         <input  class="form-control mb-3"type="text" placeholder="category" id="ct">
+                         <button onclick="send()">send</button>
+                       </div>    
+                    </div>
+                </div>`
+
+        }
+        function send() {
+            getUser[oneuser].balance -= am.value
+            amount.innerHTML = "Total balance " + getUser[oneuser].balance
+
+            localStorage.setItem("thispage", JSON.stringify(getUser))
+            var se = {
+                account: an.value,
+                amount: am.value,
+                remark: re.value,
+                category: ct.value
+            }
+            allUser.splice(set, 1, se)
+            his.innerHTML = `${allUser}`
+        }
+
+        function history() {
+            // allUsers = []
+            // allUsers.push(allUsers)
+            display.innerHTML = `
+            <div class="border border-white border-5">
+            <h5>
+            <thead>
+            <th class="with">S/N</th>
+            <th class="with">SenderName</th>
+            <th class="with">Amount</th>
+            <th class="with">Bank Name</th>
+            <th class="with">Action</th>
+            </thead>
+            </h5>
+            </div>
+            `
+            var myDate = new Date()
+            console.log(myDate)
+            allUsers.push(send.value)
+            display.innerHTML = ""
+
+            for (var index = 0; index < allUsers.length; index++) {
+                his.innerHTML += `
+                <h5>
+                    <tr>
+                        <td class="with">${[index + 1]}</td>
+                        <td class="with">${allUsers[index].SenderName}</td>
+                        <td class="with">${allUsers[index].amount}</td>
+                        <td class="with">${allUsers[index].BankName}</td>
+                        <td class="with">${allUsers[index].Action}</td>
+                        <td class="with"><button onclick="del()" class="btn btn-danger" id="del">Delete</button>
+                        <button onclick="edit(${index})" Class="btn btn-warning" id="edit">Edit</button></td>
+                    </tr>
+                <h5/>`
+                
+            }
+        }
+        function del(){
+        allUsers.splice(0,1)
+        allUsers()
+        }
+
+        // let Deposit = []
+        // let Withdraw = []
+        // let transfer = []
+        // let allUsers = []
+
+
+        // const deposit = () => {
+        //     // getUser[oneuser].balance -= am.value
+
+            
+        //     display.innerHTML = `
+        //     <div class="transition shadow p-5 rounded border-top border-end border-red">
+        //     <input class="form-control mb-3" type="text" id="add" placeholder="Amount to deposit">
+        //     <input class="form-control mb-3" type="text" id="AccBalance" placeholder="Method">
+        //     <div class="btn btn-warning" onclick="addup()">add up</div>
+        //     </div>`
+        //     if (isNan(add.value)) {
+        //          alert("enter a number")
+        //     } 
+        //     else if (add.value || AccBalance.value > 1000) {
+        //         alert("ENTER A CERTAIN AMOUNT IN YOUR ACCOUNT")
+        //     } else (
+        //         totalBalance = (Number(add.value)),
+        //         AccBalance.innerHTML = `${totalBalance}`,
+        //         console.log(totalBalance)
+        //     )
+
+           
+        // }
+        // const addup = () => {
+        //     getUser[oneuser].balance + add.value
+        //     amount.innerHTML = "Total balance " + getUser[oneuser].balance
+
+        //     // getUser[oneuser].balance -= add.value
+        //     // amount.innerHTML = "Total balance " + getUser[oneuser].balance
+
+        // }
+            
+
+
+        function signup(){
+            window.location.href="index.html" 
+        }
+        function signin(){
+            window.location.href="signin.html" 
+        }
+
+        function dashboard(){
+            window.location.href="dashboard.html" 
+
+        }
+
+          function deposit() {
+            display.innerHTML = `
+               <div class="transition shadow p-5 rounded border-top border-end border-red ">
+                  <div class="nav na-bar">
+                           <h5 class="text-center text-muted display-12">Transfer</h5>
+                         <div class="row">
+                         <input class="form-control mb-3" type="number" placeholder="Acc/No" id="an">
+                         <input class="form-control mb-3" type="currency" placeholder="Amount" id="am">
+                         <button onclick="Addup()">Add Up</button>
+                       </div>    
+                    </div>
+                </div>`
+
+        }
+
+        function Addup() {
+            getUser[oneuser].balance += am.value
+            amount.innerHTML = "Total balance " + getUser[oneuser].balance
+        }
+
+
+//         const withdraw = () => {
+//             display.innerHTML = `
+//             <!-- <div>
+//     <div>
+//         <select name="select" id="">
+//             <option value="" placeholder="SAVINGS"></option>
+//             <option value="" placeholder="CURRENT"></option>
+//         </select>
+//             <input type="text" placeholder="Amount to withdraw">
+//             <input type="text" placeholder="Remark">
+//             <button onclick="drawe()">Withdraw</button>
+//     </div>
+//  </div> -->
+//         `
+//             getUser[oneuser].withdraw -= drawer.value
+//             amount.innerHTML = "Total balance " + getUser[oneuser].withdraw
+//             localStorage.setItem("thispage", JSON.stringify(getUser))
+//         } 
+    </script>
+</body>
+</html>
